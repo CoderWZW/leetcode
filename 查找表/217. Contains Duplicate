@@ -1,0 +1,8 @@
+class Solution:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        record = collections.Counter(nums)
+        for i in record:
+            if record[i] >= 2:
+                return True
+        else:
+            return False
