@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。。
+例如：
+输入: 1->2->3->4
+输出: 2->1->4->3。
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/swap-nodes-in-pairs/
+'''
+
+'''
+思路：
+1.定义四个指针：p(虚拟指针), node1, node2, next
+2.交换指针: p->next=node2, node2->next=node1, node1->next=next
+3.移动指针: p移向node1, node1=p.next, node2=node1.next, next=node2.next
+'''
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        dummyNode = ListNode()
+        dummyNode.val = 0
+        dummyNode.next = head
+        
+        p = dummyNode
+        while(p.next and p.next.next):
+            node1 = p.next
+            node2 = node1.next
+            nexNode = node2.next
+
+            p.next = node2
+            node2.next = node1
+            node1.next = nexNode
+
+            p = node1
+        return dummyNode.next
