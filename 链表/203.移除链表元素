@@ -25,14 +25,11 @@
 
 class Solution:
     def removeElements(self, head: ListNode, val: int) -> ListNode:
-        while(head!=None and head.val == val):
-            delNode = head
-            head = delNode.next
-            
-        if(head == None):
-            return None
+        dummyHead = ListNode()
+        dummyHead.next = head
+        dummyHead.val = 0
 
-        cur = head
+        cur = dummyHead
         while(cur.next != None):
             if(cur.next.val == val):
                 # 删除cur->next节点
@@ -40,4 +37,4 @@ class Solution:
                 cur.next = delNode.next
             else:
                 cur = cur.next
-        return head
+        return dummyHead.next
