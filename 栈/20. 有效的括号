@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串，判断字符串是否有效。
+有效字符串需满足：
+左括号必须用相同类型的右括号闭合。
+左括号必须以正确的顺序闭合。
+注意空字符串可被认为是有效字符串。
+
+例如：
+输入: "()"
+输出: true
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/valid-parentheses
+'''
+
+'''
+思路：
+1.定义字符串映射表
+2.首先判断边界，即字符串是否是成对出现的，如果字符串长度为奇数，则直接返回False
+3.循环字符串，如果当前栈里存在该字符，则与栈顶元素进行对比判断，如果能相互对应，则弹出栈顶元素，否则输出False
+4.最后判断栈中元素是否都已经弹出，即栈是否为空
+'''
+
+class Solution:
+    def isValid(self, s: str) -> bool:
+        if len(s)%2 == 1:
+            return False
+        dic = {')':'(',']':'[','}':'{'}
+        stack = []
+        for i in s:
+            if stack and i in dic:
+                if stack[-1] == dic[i]: 
+                    stack.pop()
+                else: 
+                    return False
+            else: 
+                stack.append(i)
+            
+        return not stack
