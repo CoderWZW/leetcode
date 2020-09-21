@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个由 '(' 和 ')' 括号组成的字符串 S，我们需要添加最少的括号（ '(' 或是 ')'，可以在任何位置），以使得到的括号字符串有效。
+例如：
+输入："())"
+输出：1
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/minimum-add-to-make-parentheses-valid/
+'''
+
+class Solution:
+    def minAddToMakeValid(self, S: str) -> int:
+        stack = []
+        for i in S:
+            if not stack:
+                stack.append(i)
+            else:
+                if stack and i==")" and stack[-1]=="(":
+                    stack.pop()
+                else:
+                    stack.append(i)
+        return len(stack)
