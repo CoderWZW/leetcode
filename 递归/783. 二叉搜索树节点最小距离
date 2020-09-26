@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 783. 二叉搜索树节点最小距离
+给定一个二叉搜索树的根节点 root，返回树中任意两节点的差的最小值。
+例如：
+输入: root = [4,2,6,1,3,null,null]
+输出: 1
+
+链接：https://leetcode-cn.com/problems/minimum-distance-between-bst-nodes/solution/er-cha-sou-suo-shu-jie-dian-zui-xiao-ju-chi-by-lee/
+来源：力扣（LeetCode）
+'''
+
+'''
+思路：
+1.二叉搜索树的中序是按照节点数值从小到大排序的数列
+2.计算两个相近节点的差值，找到最小的差
+'''
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def minDiffInBST(self, root: TreeNode) -> int:
+        def dfs(node):
+            if node:
+                dfs(node.left)
+                self.ans = min(self.ans, node.val-self.pre)
+                self.pre = node.val
+                dfs(node.right)
+        self.pre = float('-inf')
+        self.ans = float('inf')
+        dfs(root)
+        return self.ans
