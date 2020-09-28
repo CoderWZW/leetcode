@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 1137. 第 N 个泰波那契数
+泰波那契序列 Tn 定义如下： 
+T0 = 0, T1 = 1, T2 = 1, 且在 n >= 0 的条件下 Tn+3 = Tn + Tn+1 + Tn+2
+给你整数 n，请返回第 n 个泰波那契数 Tn 的值。
+
+例如：
+输入：n = 4
+输出：4
+解释：T_3 = 0 + 1 + 1 = 2
+    T_4 = 1 + 1 + 2 = 4
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/n-th-tribonacci-number
+
+'''
+
+'''
+思路：
+1.直接用三个递归是不行的，因为复杂度为n^3，超过了题目要求
+2.所以需要考虑优化算法：
+ (1) 提前计算38个斐波那契数
+ (2) 动态计算：即计算T_4时，T_4=T_3+T_2+T_1, 而T_3=T_2+T_1+T_0, 也就是在这里把0，1，2分别看作x, y, z，将三个的和放在z里，把1，2，3放到0，1, 2的位置
+'''
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        if n==0:
+            return 0
+        elif n==1 or n==2:
+            return 1
+        x, y, z = 0, 1, 1
+        for _ in range(n-2):
+            x, y, z = y, z, x+y+z
+        return z
