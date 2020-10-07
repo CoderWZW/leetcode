@@ -1,0 +1,36 @@
+"""
+题目： 
+给定一个单词列表，只返回可以使用在键盘同一行的字母打印出来的单词。
+
+输入: ["Hello", "Alaska", "Dad", "Peace"]
+输出: ["Alaska", "Dad"]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/keyboard-row/
+
+"""
+
+"""
+思路：
+哈希表
+"""
+
+class Solution(object):
+    def findWords(self, words):
+        """
+        :type words: List[str]
+        :rtype: List[str]
+        """
+        l1,l2,l3='qwertyuiop','asdfghjkl','zxcvbnm'
+        ans=[]
+
+        for word in words:
+            lw=word.lower()
+            sum1=sum(1 for i in lw if i in l1)
+            sum2=sum(1 for i in lw if i in l2)
+            sum3=sum(1 for i in lw if i in l3)
+
+            if max(sum1,sum2,sum3)==len(word):
+                ans.append(word)
+
+        return ans
