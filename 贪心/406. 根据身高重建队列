@@ -1,0 +1,30 @@
+"""
+题目： 
+假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 
+编写一个算法来重建这个队列。
+
+输入:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+输出:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/queue-reconstruction-by-height
+"""
+
+"""
+思路：
+解释：给你一个数组，其中第一个数字表示身高，第二个数字表示前面有几个大于等于你身高的人数，返回按照题目给出的顺序的身高数组顺序
+·将最高的人按照k值升序排序，然后将它们放置到输出队列中与k值相等的索引位置上。
+·按降序取下一个高度，同样按k值对该身高的人升序排序，然后逐个插入到输出队列中与k值相等的索引位置上。
+·直到完成为止。
+List.insert(index, obj)函数：index--对象obj需要插入的索引位置；obj--要插入列表中的对象。
+"""
+
+class Solution:
+    def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
+        people.sort(key = lambda x: (-x[0], x[1]))
+        output = []
+        for p in people:
+            output.insert(p[1], p)
+        return output

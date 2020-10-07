@@ -1,0 +1,51 @@
+"""
+题目： 
+给你两个非负整数数组 rowSum 和 colSum ，其中 rowSum[i] 是二维矩阵中第 i 行元素的和，colSum[j] 是第j列元素的和。换言之你不知道矩阵里的每个元素，但是你知道每一行和每一列的和。
+请找到大小为rowSum.length x colSum.length的任意 非负整数 矩阵，且该矩阵满足rowSum和colSum的要求。
+请你返回任意一个满足题目要求的二维矩阵，题目保证存在至少一个可行矩阵。
+
+输入：rowSum = [3,8], colSum = [4,7]
+输出：[[3,0],
+      [1,7]]
+解释：
+第 0 行：3 + 0 = 0 == rowSum[0]
+第 1 行：1 + 7 = 8 == rowSum[1]
+第 0 列：3 + 1 = 4 == colSum[0]
+第 1 列：0 + 7 = 7 == colSum[1]
+行和列的和都满足题目要求，且所有矩阵元素都是非负的。
+另一个可行的矩阵为：[[1,2],
+                  [3,5]]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-valid-matrix-given-row-and-column-sums
+"""
+
+"""
+思路： 贪心算法，先将网格其中一个设为最大的数字，其他位置为0
+"""
+
+class Solution(object):
+    def restoreMatrix(self, rowSum, colSum):
+        """
+        :type rowSum: List[int]
+        :type colSum: List[int]
+        :rtype: List[List[int]]
+        """
+        row = len(rowSum)
+        col = len(colSum)
+
+        grad = [[0 for i in range(col)] for j in range(row)]
+
+        for i in range(row):
+            need = rowSum[i]
+            for  j in range(col):
+                if colSum[j]<need:
+                    grad[i][j]=colSum[j]
+                    need =need-colSum[j]
+                    colSum[j]=0
+                else:
+                    grad[i][j]=need
+                    colSum[j]=colSum[j]-need
+                    need = 0
+                    break
+        return grad
