@@ -1,0 +1,65 @@
+"""
+给出一个满足下述规则的二叉树：
+root.val == 0
+如果 treeNode.val == x 且 treeNode.left != null，那么 treeNode.left.val == 2 * x + 1
+如果 treeNode.val == x 且 treeNode.right != null，那么 treeNode.right.val == 2 * x + 2
+现在这个二叉树受到「污染」，所有的 treeNode.val 都变成了 -1。
+请你先还原二叉树，然后实现 FindElements 类：
+FindElements(TreeNode* root) 用受污染的二叉树初始化对象，你需要先把它还原。
+bool find(int target) 判断目标值 target 是否存在于还原后的二叉树中并返回结果。
+
+输入：
+["FindElements","find","find"]
+[[[-1,null,-1]],[1],[2]]
+输出：
+[null,false,true]
+解释：
+FindElements findElements = new FindElements([-1,null,-1]); 
+findElements.find(1); // return False 
+findElements.find(2); // return True 
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-elements-in-a-contaminated-binary-tree
+
+"""
+
+"""
+思路：
+深度优先搜索
+"""
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class FindElements:
+
+    def __init__(self, root: TreeNode):
+        self.root = root
+        # 初始化根结点值 为0
+        self.root.val = 0
+        # 字典用于存储每个结点的值
+        self.dic = {}
+        def dfs(root):
+            # 将根结点值存入字典
+            self.dic[root.val] = 1
+            # 如果左子树存在，左子树根结点赋值， 随后遍历左子树
+            if root.left:
+                root.left.val = root.val*2+1
+                dfs(root.left) 
+            # 右子树同理
+            if root.right:
+                root.right.val = root.val*2+2
+                dfs(root.right)
+        dfs(self.root)
+
+    def find(self, target: int) -> bool:
+        # 字典查询target
+        if target in self.dic:
+            return True
+        else:
+            return False
