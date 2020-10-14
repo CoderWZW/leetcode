@@ -25,5 +25,23 @@ def bubble_sort(l):
     return l
 
 print(bubble_sort(l))
-                
+
+# -*- coding: utf-8 -*-
+# """
+# 题目：冒泡排序
+
+# 思路：
+# ·比较相邻的元素。如果第一个比第二个大，就交换他们两个
+# ·对每一对相邻元素做同样的工作，从开始第一对到结尾的最后一对
+# ·针对所有的元素重复以上的步骤，除了最后一个
+# ·持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字比较
+# """
+
+# class Solution:
+#     def bubbleSort(arr):
+#         for i in range(1, len(arr)):
+#             for j in range(0, len(arr)-i):
+#                 if arr[j]>arr[j+1]:
+#                     arr[j], arr[j+1] = arr[j+1], arr[j]
+#         return arr
             
