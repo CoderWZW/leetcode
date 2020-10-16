@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+'''
+题目：快速排序
+快速排序通常明显比其他 Ο(nlogn) 算法更快，因为它的内部循环可以在大部分的架构上很有效率地被实现出来。
+快速排序使用分治法策略来把一个串行分为两个子串行
+
+思想：
+·从数列中挑出一个元素，称为 “基准”；
+·重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面。在这个分区退出之后，该基
+·递归地把小于基准值元素的子数列和大于基准值元素的子数列排序；
+'''
+import math
+
+class Solution:
+    def quickSort(arr, left=None, right=None):
+        left = 0 if not isinstance(left, (int, float)) else left
+        right = len(arr)-1 if not isinstance(right, (int, float)) else right
+        if left < right:
+            partitionIndex = partition(arr, left, right)
+            quickSort(arr, left, partitionIndex-1)
+            quickSort(arr, partitionIndex+1, right)
+        return arr
+
+    def partition(arr, left, right):
+        pivot = left
+        index = pivot+1
+        i = index
+        while  i <= right:
+            if arr[i] < arr[pivot]:
+                swap(arr, i, index)
+                index+=1
+            i+=1
+        swap(arr,pivot,index-1)
+        return index-1
+
+    def swap(arr, i, j):
+        arr[i], arr[j] = arr[j], arr[i]
