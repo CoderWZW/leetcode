@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+
+我们把符合下列属性的数组 A 称作山脉：
+A.length >= 3
+存在 0 < i < A.length - 1 使得A[0] < A[1] < ... A[i-1] < A[i] > A[i+1] > ... > A[A.length - 1]
+给定一个确定为山脉的数组，返回任何满足 A[0] < A[1] < ... A[i-1] < A[i] > A[i+1] > ... > A[A.length - 1] 的 i 的值。
+
+例如：
+输入：[0,1,0]
+输出：1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/peak-index-in-a-mountain-array
+'''
+
+'''
+思路：
+· 二分查找： 寻找一个数、寻找左侧边界、寻找右侧边界
+
+'''
+
+class Solution:
+    def peakIndexInMountainArray(self, arr: List[int]) -> int:
+        n = len(arr)
+        left, right = 0, n-1
+        while left <= right:
+            mid = (left+right) // 2
+            l = arr[mid-1] if mid > 0 else -1
+            r = arr[mid+1] if mid < n-1 else -1
+            if l < arr[mid] and r < arr[mid]:
+                return mid
+            if l < arr[mid] < r:
+                left = mid+1
+            elif l > arr[mid] > r:
+                right = mid-1
