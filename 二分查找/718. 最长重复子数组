@@ -1,0 +1,69 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 
+给两个整数数组 A 和 B ，返回两个数组中公共的、长度最长的子数组的长度。
+
+例如：
+输入：
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+输出：3
+解释：
+长度最长的公共子数组是 [3, 2, 1] 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/maximum-length-of-repeated-subarray/
+'''
+
+'''
+思路：
+动态规划：
+如果A[i]==B[i],则A[I:]与B[j:]的最长公共前缀为A[i+1]与B[i+1]的最长公共前缀的长度加一，否则我们知道A[i:]与B[i:]的最长公共前缀为零
+因此，动态规划的解法：令dp[i][j]表示A[i:]和B[j:]的最长公共前缀，那么答案即为所有dp[i][j]中的最大值。
+如果A[i]==B[j],那么dp[i][j]==dp[i+1][j+1]+1，否则dp[i][j]=0。
+考虑到这里 dp[i][j] 的值从 dp[i + 1][j + 1] 转移得到，所以我们需要倒过来，首先计算 dp[len(A) - 1][len(B) - 1]，最后计算 dp[0][0]
+
+滑动窗口：
+我们注意到之所以两位置会比较多次，是因为重复子数组在两个数组中的位置可能不同。以 A = [3, 6, 1, 2, 4], B = [7, 1, 2, 9] 为例，它们的最长重复子数组是 [1, 2]，在 A 与 B 中的开始位置不同。
+但如果我们知道了开始位置，我们就可以根据它们将 A 和 B 进行「对齐」
+我们可以枚举 A 和 B 所有的对齐方式。
+对齐的方式有两类：第一类为 A 不变，B 的首元素与 A 中的某个元素对齐；第二类为 B 不变，A 的首元素与 B 中的某个元素对齐。对于每一种对齐方式，我们计算它们相对位置相同的重复子数组即可。
+
+'''
+############## 动态规划 #################
+# class Solution:
+#     def findLength(self, A: List[int], B: List[int]) -> int:
+#         n, m = len(A), len(B)
+#         dp = [[0] * (m + 1) for _ in range(n + 1)]
+#         ans = 0
+#         for i in range(n - 1, -1, -1):
+#             for j in range(m - 1, -1, -1):
+#                 if A[i] == B[j]:
+#                     dp[i][j] = dp[i + 1][j + 1] + 1  
+#                 else: 
+#                     0
+#                 ans = max(ans, dp[i][j])
+#         return ans
+
+############## 滑动窗口 #################
+class Solution:
+    def findLength(self, A: List[int], B: List[int]) -> int:
+        def maxLength(addA: int, addB: int, length: int) -> int:
+            ret = k = 0
+            for i in range(length):
+                if A[addA + i] == B[addB + i]:
+                    k += 1
+                    ret = max(ret, k)
+                else:
+                    k = 0
+            return ret
+        
+        n, m = len(A), len(B)
+        ret = 0
+        for i in range(n):
+            length = min(m, n - i)
+            ret = max(ret, maxLength(i, 0, length))
+        for i in range(m):
+            length = min(n, m - i)
+            ret = max(ret, maxLength(0, i, length))
+        return ret
