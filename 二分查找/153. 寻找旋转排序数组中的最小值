@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+请找出其中最小的元素。
+你可以假设数组中不存在重复元素。
+
+例如：
+输入: [3,4,5,1,2]
+输出: 1
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-minimum-in-rotated-sorted-array
+'''
+
+'''
+思路：
+二分搜索：
+在二分搜索中，我们找到区间的中间点并根据某些条件决定去区间左半部分还是右半部分搜索。
+由于给定的数组是有序的，我们就可以使用二分搜索。然而，数组被旋转了，所以简单的使用二分搜索并不可行。
+如果数组没有被旋转，是升序排列，就满足 last element > first element
+
+在这个改进版本的二分搜索算法中，我们需要找到旋转的点
+所有变化点左侧元素 > 数组第一个元素
+所有变化点右侧元素 < 数组第一个元素
+
+找到数组的中间元素 mid。
+如果中间元素 > 数组第一个元素，我们需要在 mid 右边搜索变化点。
+如果中间元素 < 数组第一个元素，我们需要在 mid 左边搜索变化点
+'''
+
+class Solution(object):
+    def findMin(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 1:
+            return nums[0]
+
+        left = 0
+        right = len(nums) - 1
+
+        if nums[right] > nums[0]:
+            return nums[0]
+
+        while right >= left:
+            mid = left + (right - left) // 2
+            if nums[mid] > nums[mid + 1]:
+                return nums[mid + 1]
+            if nums[mid - 1] > nums[mid]:
+                return nums[mid]
+
+            if nums[mid] > nums[0]:
+                left = mid + 1
+            else:
+                right = mid - 1
