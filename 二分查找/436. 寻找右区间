@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 
+给定一组区间，对于每一个区间 i，检查是否存在一个区间 j，它的起始点大于或等于区间 i 的终点，这可以称为 j 在 i 的“右侧”。
+对于任何区间，你需要存储的满足条件的区间 j 的最小索引，这意味着区间 j 有最小的起始点可以使其成为“右侧”区间。
+如果区间 j 不存在，则将区间 i 存储为 -1。最后，你需要输出一个值为存储的区间值的数组。
+
+例如：
+输入: [ [1,2] ]
+输出: [-1]
+解释:集合中只有一个区间，所以输出-1。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-right-interval
+'''
+
+'''
+思路： 二分法
+1、题目中的关键字是找“大于等于”，最小的那个区间的索引，很显然需使用二分查找算法；
+2、要使用二分查找，需要在有序的环境中进行，因此，需要对区间排序（可将这一步称之为预处理）；
+3、题目要求返回索引，但是排序以后，索引信息丢失。因此在预处理的时候，就得把“起点”和“索引”的关系存起来。
+刚刚好题目中说道：“你可以假定这些区间都不具有相同的起始点”，用哈希表正合适。
+4、排序的时候，只需要对起点进行排序即可；
+5、在二分查找的时候，传入的是区间的右端点，查找的是大于等于区间的右端点的第 1 个值，因此它的反面就是：小于一定不是解。根据这个“减而治之”的策略，编写二分查找算法。
+'''
+
+class Solution:
+    def findRightInterval(self, intervals: List[List[int]]) -> List[int]:
+        n = len(intervals)
+        # 排序前给每一项添加索引
+        for i in range(n):
+            intervals[i].append(i)
+        # 按 start 排序
+        intervals.sort(key=operator.itemgetter(0))
+        res = [-1]*n
+        for i in range(n):
+            l, r = i+1, n-1
+            # 不存在的情况
+            if intervals[r][0]<intervals[i][1]:
+                continue
+            while l<r:
+                m = (l+r)//2
+                if intervals[m][0]>=intervals[i][1]: r = m
+                else: l = m+1
+            res[intervals[i][2]] = intervals[r][2]
+        return res
