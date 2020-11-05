@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+'''
+题目： 
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+你可以假设数组中无重复元素。
+
+例如：
+输入: [1,3,5,6], 5
+输出: 2
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/search-insert-position/
+'''
+
+'''
+思路：https://leetcode-cn.com/problems/search-insert-position/solution/sou-suo-cha-ru-wei-zhi-by-leetcode-solution/
+
+'''
+
+from typing import List
+
+
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        size = len(nums)
+        if size == 0:
+            return 0
+
+        # 特判
+        if nums[size - 1] < target:
+            return size
+
+        left = 0
+        right = size - 1
+
+        while left < right:
+            # left + right 在 Python 中如果发生整型溢出，Python 会自动转成长整形
+            mid = (left + right) // 2
+            # 严格小于 target 的元素一定不是解
+            if nums[mid] < target:
+                # 下一轮搜索区间是 [mid + 1, right]
+                left = mid + 1
+            else:
+                # 下一轮搜索区间是 [left, mid]
+                right = mid
+        return left
