@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一位研究者论文被引用次数的数组（被引用次数是非负整数），数组已经按照升序排列。
+编写一个方法，计算出研究者的 h 指数。
+
+h 指数的定义: “h 代表“高引用次数”（high citations），一名科研人员的 h 指数是指他（她）的 （N 篇论文中）总共有 h 篇论文分别被引用了至少 h 次。
+（其余的 N - h 篇论文每篇被引用次数不多于 h 次。）"
+
+例如：
+输入: citations = [0,1,3,5,6]
+输出: 3 
+解释: 给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 0, 1, 3, 5, 6 次。
+     由于研究者有 3 篇论文每篇至少被引用了 3 次，其余两篇论文每篇被引用不多于 3 次，所以她的 h 指数是 3。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/h-index-ii
+'''
+
+'''
+思路：
+问题实际上可以归结为：给定一个大小为 n 的升序的引用次数列表，要求找到满足 citations[i] >= n - i 的第一个 citations[i]
+通过问题的转换，我们可以用二分搜索来解决该问题。在二分搜索算法中，我们递归的将搜索范围减半，与线性搜索相比，时间复杂度更优为 O(logN)。
+先获取列表的中间元素，即 citations[pivot]，它将原始列表分成了两个子列表：citations[0 : pivot - 1] 和 citations[pivot + 1 : n]。
+然后比较 n - pivot 和 citations[pivot] 的值，二分搜索算法分为以下 3 种情况：
+若 citations[pivot] == n - pivot：则我们找到了想要的元素。
+若 citations[pivot] < n - pivot：由于我们想要的元素应该大于或等于 n - pivot，所以我们应该进一步搜索右边的子列表，即 citations[pivot + 1 : n]。
+若 citations[pivot] > n - pivot：我们应该进一步搜索左边的子列表，即 citations[0 : pivot-1]。
+'''
+
+class Solution:
+    def hIndex(self, citations):
+        """
+        :type citations: List[int]
+        :rtype: int
+        """
+        n = len(citations)
+        left, right = 0, n - 1
+        while left <= right:
+            pivot = left + (right - left) // 2
+            if citations[pivot] == n - pivot:
+                return n - pivot
+            elif citations[pivot] < n - pivot:
+                left = pivot + 1
+            else:
+                right = pivot - 1
+        
+        return n - left
