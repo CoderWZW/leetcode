@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+编写程序以 x 为基准分割链表，使得所有小于 x 的节点排在大于或等于 x 的节点之前。如果链表中包含 x，x 只需出现在小于 x 的元素之后(如下所示)。
+分割元素 x 只需处于“右半部分”即可，其不需要被置于左右两部分之间。
+
+例如：
+输入: head = 3->5->8->5->10->2->1, x = 5
+输出: 3->1->2->10->5->5->8
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/partition-list-lcci
+'''
+
+'''
+思路：
+双指针法，思路类似于“荷兰国旗🇳🇱”的颜色排序题目.
+p指针左边必定是小于x的节点，q指针遍历链表，遇到val<x时，交换p,q的val，并且p=p.next
+'''
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        p, q = head, head
+        while q:
+            if q.val < x:
+                q.val, p.val = p.val, q.val
+                p = p.next
+            q = q.next
+        return head
