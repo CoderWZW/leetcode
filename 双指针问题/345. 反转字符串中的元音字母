@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+编写一个函数，以字符串作为输入，反转该字符串中的元音字母。
+
+例如：
+输入："hello"
+输出："holle"
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/reverse-vowels-of-a-string/
+'''
+
+'''
+思路： 双指针
+利用双指针进行遍历，当s[low]为元音字母时，停下，当s[high]为元音字母时停下，进行交换
+'''
+
+class Solution:
+    def reverseVowels(self, s):
+        array = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+        sList = list(s)
+        left, right = 0, len(s)-1
+        while left < right:
+            if sList[left] in array and sList[right] in array:
+                sList[left], sList[right] = sList[right], sList[left]
+                left += 1
+                right -= 1
+            if sList[right] not in array:
+                right -= 1
+            if sList[left] not in array:
+                left += 1
+        return ''.join(sList)
