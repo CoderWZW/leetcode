@@ -1,0 +1,46 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给你两个有序整数数组 nums1 和 nums2，请你将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+
+例如：
+输入：
+nums1 = [1,2,3,0,0,0], m = 3
+nums2 = [2,5,6],       n = 3
+
+输出：[1,2,2,3,5,6]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/merge-sorted-array/
+'''
+
+'''
+思路： 双指针
+为了利用A和B两个数组已经排序的性质，我们可以使用双指针方法。
+这一方法将两个数组看作队列，每次从两个数组头部取出比较小的数字放到结果中。
+'''
+
+class Solution:
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        """
+        Do not return anything, modify A in-place instead.
+        """
+        pointer1, pointer2 = 0, 0
+        result = []
+        while pointer1<m or pointer2<n:
+            if pointer1 == m:
+                result.append(nums2[pointer2])
+                pointer2 += 1
+            elif pointer2 == n:
+                result.append(nums1[pointer1])
+                pointer1 += 1
+            elif nums1[pointer1] < nums2[pointer2]:
+                result.append(nums1[pointer1])
+                pointer1 += 1
+            else:
+                result.append(nums2[pointer2])
+                pointer2 += 1
+        nums1[:] = result
