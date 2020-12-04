@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个字符串和一个字符串字典，找到字典里面最长的字符串，该字符串可以通过删除给定字符串的某些字符来得到。
+如果答案不止一个，返回长度最长且字典顺序最小的字符串。如果答案不存在，则返回空字符串。
+
+例如：
+输入:
+s = "abpcplea", d = ["ale","apple","monkey","plea"]
+输出: 
+"apple"
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-word-in-dictionary-through-deleting
+'''
+
+'''
+思路：双指针
+可以将字典中所有是子字符串的字符串保存起来再找长度最长且字典顺序最小的，也可以将字典先排序再判断是否子字符串。
+'''
+
+# class Solution:
+#     def findLongestWord(self, s: str, d: List[str]) -> str:
+
+#         ans, ans_len = '', 0
+#         for dStr in d:
+#             i = j =0
+#             while i < len(s) and j < len(dStr):
+#                 if s[i] == dStr[j]:
+#                     i += 1
+#                     j += 1
+#                 else:
+#                     i += 1
+#             if  j == len(dStr):
+#                 if j > ans_len:
+#                     ans, ans_len = dStr, j
+#                 elif j == ans_len and dStr < ans:
+#                     ans = dStr
+#                     ans, ans_len = dStr, j
+
+#         return ans
+
+class Solution:
+    def findLongestWord(self, s: str, d: List[str]) -> str:
+        # d.sort(key=lambda x: (-len(x), x))
+        # def f(c):
+        #     i = 0
+        #     for j in c:
+        #         if (i := s.find(j, i)) == -1:
+        #             return True
+        #         i += 1
+        # return next((c for c in d if not f(c)), '')
+
+        d.sort(key = lambda x: (-len(x), x))
+        for word in d:
+            index = 0
+            for ch in word:
+                index = s.find(ch, index) + 1  # find输出-1:False
+                if not index:
+                    break
+            else:       # 这里用else语句保证break之后不会执行，正常循环结束会执行
+                return word
+        return ''
