@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+请判断一个链表是否为回文链表。
+例如：
+输入: 1->2
+输出: false
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/palindrome-linked-list/
+'''
+
+'''
+思路：双指针
+·复制链表值到数组列表中，需要遍历链表将值复制到数组列表中
+·使用双指针法判断是否为回文。
+'''
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def isPalindrome(self, head: ListNode) -> bool:
+        vals = []
+        current_node = head
+        while current_node is not None:
+            vals.append(current_node.val)
+            current_node = current_node.next
+        return vals == vals[::-1]

@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。输入一个递增排序的数组的一个旋转，输出旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一个旋转，该数组的最小值为1。
+
+例如：
+输入：[3,4,5,1,2]
+输出：1
+
+来源：力扣（LeetCode）
+https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/
+'''
+
+'''
+思路：
+二分查找：
+我们考虑数组中的最后一个元素 x：在最小值右侧的元素，它们的值一定都小于等于 x；
+而在最小值左侧的元素，它们的值一定都大于等于 x。
+因此，我们可以根据这一条性质，通过二分查找的方法找出最小值。
+在二分查找的每一步中，左边界为 low，右边界为 high，区间的中点为 pivot，最小值就在该区间内。
+我们将中轴元素 numbers[pivot] 与右边界元素 numbers[high] 进行比较，可能会有以下的三种情况
+
+· 第一种情况是numbers[pivot]<numbers[high]。numbers[pivot] 是最小值右侧的元素，因此我们可以忽略二分查找区间的右半部分。
+· 第二种情况是numbers[pivot]>numbers[high]。这说明 numbers[pivot] 是最小值左侧的元素，
+· 第三种情况是numbers[pivot]==numbers[high]。由于重复元素的存在，并不能确定numbers[pivot]究竟在最小值的左侧还是右侧，因此我们不能莽撞地忽略，因此我们可以忽略二分查找区间的右端点。
+'''
+
+class Solution:
+    def minArray(self, numbers: List[int]) -> int:
+        low, high = 0, len(numbers) - 1
+        while low < high:
+            pivot = low + (high - low) // 2
+            if numbers[pivot] < numbers[high]:
+                high = pivot 
+            elif numbers[pivot] > numbers[high]:
+                low = pivot + 1
+            else:
+                high -= 1
+        return numbers[low]

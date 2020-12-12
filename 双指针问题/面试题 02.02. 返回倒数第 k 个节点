@@ -1,0 +1,31 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+实现一种算法，找出单向链表中倒数第 k 个节点。返回该节点的值。
+
+例如：
+输入： 1->2->3->4->5 和 k = 2
+输出： 4
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/kth-node-from-end-of-list-lcci/
+'''
+
+'''
+思路：双指针问题
+'''
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def kthToLast(self, head: ListNode, k: int) -> int:
+        formar, latter = head, head
+        for _ in range(k):
+            formar = formar.next
+        while formar:
+            formar, latter = formar.next, latter.next
+        return latter.val

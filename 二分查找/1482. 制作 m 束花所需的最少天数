@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+
+给你一个整数数组 bloomDay，以及两个整数 m 和 k 。
+现需要制作 m 束花。制作花束时，需要使用花园中 相邻的 k 朵花 。
+花园中有 n 朵花，第 i 朵花会在 bloomDay[i] 时盛开，恰好 可以用于 一束  花中。
+请你返回从花园中摘 m 束花需要等待的最少的天数。如果不能摘到 m 束花则返回 -1 。
+
+输入：bloomDay = [1,10,3,10,2], m = 3, k = 1
+输出：3
+解释：让我们一起观察这三天的花开过程，x 表示花开，而 _ 表示花还未开。
+现在需要制作 3 束花，每束只需要 1 朵。
+1 天后：[x, _, _, _, _]   // 只能制作 1 束花
+2 天后：[x, _, _, _, x]   // 只能制作 2 束花
+3 天后：[x, _, x, _, x]   // 可以制作 3 束花，答案为 3
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/minimum-number-of-days-to-make-m-bouquets
+'''
+
+'''
+思路：二分法
+两处需要优化的地方, 一个是找天数p, 如果第p天的时候无法制作m束花, 那么第1...p天的时候也都不满足, 如果第p天的时候可以制作m束花, 那么第p, p+1, p+2, ...天都可以; 所以可以在天数上采用二分查找的方式;
+第二处是当确定天数之后, 每一个花园的花是否盛开状态就都可以知道了, 找到此时可以制作多少束花, 也即找到此时有多少个不重叠的连续长度为k的盛开序列, 
+直接用对每一个位置采用sum函数求往后的K个连续盛开数量会超时(复杂度O(N*K)), 因此可以直接遍历一遍用两个变量分别记录当前找的序列是否可以制作一束花, 以及已经可以制作的花的数量。
+'''
+
+class Solution(object):
+    def minDays(self, bloomDay, m, k):
+        size = len(bloomDay)
+        if m*k>size:
+            return -1
+        res = []
+
+        def getflowers(day,start,end,):
+            res =0
+            pre =start
+            for i in range(start,end+1):
+                if bloomDay[i]>day:
+                    res += (i-pre)//k
+                    pre = i+1
+            res +=(end+1-pre)//k
+            return res
+
+        left = min(bloomDay)
+        right = max(bloomDay)
+
+        while left<right:
+            mid = (left+right)//2
+            curflowers = getflowers(mid,0,size-1,)
+            if curflowers<m:
+                left = mid+1
+            else:
+                right = mid
+        return left

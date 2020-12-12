@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+例如：
+输入：nums = [-1,2,1,-4], target = 1
+输出：2
+解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/3sum-closest
+'''
+
+'''
+思路：滑动窗口
+初始化头尾指针 head，tail；
+tail 指针右移，判断 tail 指向的元素是否在 [head:tail] 的窗口内；
+如果窗口中没有该元素，则将该元素加入窗口，同时更新窗口长度最大值，tail 指针继续右移；
+如果窗口中存在该元素，则将 head 指针右移，直到窗口中不包含该元素。
+返回窗口长度的最大值。
+'''
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        head = 0
+        tail = 0
+        if len(s) < 2: return len(s) # 边界条件
+        res = 1
+        
+        while tail < len(s) - 1:
+            tail += 1
+            if s[tail] not in s[head: tail]:
+                res = max(tail - head + 1, res)
+            else:
+                while s[tail] in s[head: tail]:
+                    head += 1
+        return res

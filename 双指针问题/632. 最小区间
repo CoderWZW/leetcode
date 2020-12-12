@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+你有 k 个 非递减排列 的整数列表。找到一个 最小 区间，使得 k 个列表中的每个列表至少有一个数包含在其中。
+我们定义如果 b-a < d-c 或者在 b-a == d-c 时 a < c，则区间 [a,b] 比 [c,d] 小。
+
+例如：
+输入：nums = [[4,10,15,24,26], [0,9,12,20], [5,18,22,30]]
+输出：[20,24]
+解释： 
+列表 1：[4, 10, 15, 24, 26]，24 在区间 [20,24] 中。
+列表 2：[0, 9, 12, 20]，20 在区间 [20,24] 中。
+列表 3：[5, 18, 22, 30]，22 在区间 [20,24] 中。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/smallest-range-covering-elements-from-k-lists
+'''
+
+'''
+思路：
+哈希表+滑动窗口
+'''
+
+class Solution:
+    def smallestRange(self, nums: List[List[int]]) -> List[int]:
+        n = len(nums)
+        indices = collections.defaultdict(list)
+        xMin, xMax = 10**9, -10**9
+        for i, vec in enumerate(nums):
+            for x in vec:
+                indices[x].append(i)
+            xMin = min(xMin, *vec)
+            xMax = max(xMax, *vec)
+        
+        freq = [0] * n
+        inside = 0
+        left, right = xMin, xMin - 1
+        bestLeft, bestRight = xMin, xMax
+
+        while right < xMax:
+            right += 1
+            if right in indices:
+                for x in indices[right]:
+                    freq[x] += 1
+                    if freq[x] == 1:
+                        inside += 1
+                while inside == n:
+                    if right - left < bestRight - bestLeft:
+                        bestLeft, bestRight = left, right
+                    if left in indices:
+                        for x in indices[left]:
+                            freq[x] -= 1
+                            if freq[x] == 0:
+                                inside -= 1
+                    left += 1
+
+        return [bestLeft, bestRight]

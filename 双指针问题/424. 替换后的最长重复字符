@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。
+在执行上述操作后，找到包含重复字母的最长子串的长度。
+
+例如：
+输入:
+s = "ABAB", k = 2
+输出:
+4
+解释:
+用两个'A'替换为两个'B',反之亦然。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/longest-repeating-character-replacement/
+'''
+
+'''
+思路： 滑动窗口
+满足条件时，扩张长度1，不满足条件，则滑动窗口
+保存滑动窗口内相同字母出现次数的历史最大值
+通过判断窗口宽度（right-left+1）- maxFreq > K 来决定窗口是否做滑动，否则窗口就扩张
+只需要记录历史最大值的原因是我们只需要最终保证输出的是最大长度，无需缩减窗口大小
+'''
+
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        from collections import defaultdict
+        # 动态滑动窗口
+        maxLen, windowStart, maxFreq = 0, 0, 0
+        # 统计出现频率
+        freqDict = defaultdict(int)
+        for windowEnd in range(len(s)):
+            rightChar = s[windowEnd]
+            freqDict[rightChar] += 1
+            # 保存历史出现的最大频率
+            maxFreq = max(freqDict[rightChar], maxFreq)
+            # 缩小滑动窗口
+            if (windowEnd - windowStart + 1 - maxFreq) > k:
+                leftChar = s[windowStart]
+                windowStart += 1
+                freqDict[leftChar] -= 1       
+            maxLen = max(maxLen, windowEnd - windowStart + 1)
+        return maxLen
