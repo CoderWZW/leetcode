@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+假设你正在爬楼梯。需要 n 阶你才能到达楼顶。
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+注意：给定 n 是一个正整数。
+
+例如：
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/climbing-stairs/
+'''
+
+'''
+思路：动态规划
+我们用 f(x) 表示爬到第 x 级台阶的方案数，考虑最后一步可能跨了一级台阶，也可能跨了两级台阶，所以我们可以列出如下式子：
+f(x)=f(x−1)+f(x−2)
+它意味着爬到第x级台阶的方案数是爬到第x−1级台阶的方案数和爬到第x−2级台阶的方案数的和。很好理解，因为每次只能爬1级或2级，所以f(x)只能从f(x−1)和f(x−2)转移过来，而这里要统计方案总数，我们就需要对这两项的贡献求和。
+
+
+'''
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        result = dict()
+        result[0] = 1
+        result[1] = 1
+        for i in range(2, n+1):
+            result[i] = result[i-1] + result[i-2]
+        return result[n]
