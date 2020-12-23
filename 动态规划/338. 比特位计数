@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。
+
+例如：
+输入: 2
+输出: [0,1,1]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/counting-bits/
+'''
+
+'''
+思路：
+1、位运算
+迭代统计每个数二进制位为1的个数
+通过n&=n-1方式消掉二进制最低位的1
+2、动态规划法
+某个偶数肯定能由前面的某个数左移一位得到，如十进制6对应的二进制为110，由十进制3对应二进制11左移一位得到
+某个奇数肯定能由前面的某个数左移一位并加上1得到，如十进制7对应的二进制为111，是由十进制3对应二进制11左移一位为110并加一得到
+'''
+class Solution:
+    def countBits(self, num: int) -> List[int]:
+        def bin_count(n):
+            count=0
+            while n:
+                n&=n-1
+                count+=1
+            return count
+
+        res=[]
+        for i in range(num+1):
+            res.append(bin_count(i))
+        return res
+
+# class Solution:
+#     def countBits(self, num: int) -> List[int]:
+#         dp=[0]*(num+1)
+#         for i in range(num//2+1):
+#             dp[i*2]=dp[i]
+#             if i*2+1<=num:
+#                 dp[i*2+1]=dp[i]+1
+#         return dp
