@@ -1,0 +1,33 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+数组的每个索引作为一个阶梯，第 i个阶梯对应着一个非负数的体力花费值 cost[i](索引从0开始)。
+每当你爬上一个阶梯你都要花费对应的体力花费值，然后你可以选择继续爬一个阶梯或者爬两个阶梯。
+您需要找到达到楼层顶部的最低花费。在开始时，你可以选择从索引为 0 或 1 的元素作为初始阶梯。
+
+例如：
+输入: cost = [10, 15, 20]
+输出: 15
+解释: 最低花费是从cost[1]开始，然后走两步即可到阶梯顶，一共花费15。
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/min-cost-climbing-stairs
+'''
+
+'''
+思路：动态规划--最大最小问题
+第i级台阶是第i-1级台阶的阶梯顶部。
+踏上第i级台阶花费cost[i]，直接迈一大步跨过而不踏上去则不用花费。
+到达第i级台阶的阶梯顶部的最小花费，有两个选择：
+· 先付出最小总花费minCost[i-1]到达第i级台阶（即第i-1级台阶的阶梯顶部），踏上第i级台阶需要再花费cost[i]，再迈一步到达第i级台阶的阶梯顶部，最小总花费为minCost[i-1] + cost[i])
+· 先付出最小总花费minCost[i-2]到达第i-1级台阶（即第i-2级台阶的阶梯顶部），踏上第i-1级台阶需要再花费cost[i-1]，再迈两步跨过第i级台阶直接到达第i级台阶的阶梯顶部，最小总花费为minCost[i-2] + cost[i-1])；
+'''
+
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        n = len(cost)
+        minCost = [0]*(n)
+        minCost[1] = min(cost[0], cost[1])
+        for i in range(2, n):
+            minCost[i] = min(minCost[i - 1] + cost[i], minCost[i - 2] + cost[i - 1])
+        return minCost[-1]

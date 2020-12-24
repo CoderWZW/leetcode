@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
+
+例如：
+输入：n = 3 
+输出：4
+说明: 有四种走法
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/three-steps-problem-lcci
+'''
+
+'''
+思路：
+1、动态规划
+状态转移方程：dp[4] = dp[1] + dp[2] + dp[3]
+dp[n] = dp[n-1] + dp[n-2] + dp[n-3] 
+2、矩阵快速幂
+[f_{i-3}, f_{i-2}, f_{i-1}]给它右边乘上一个矩阵A[[0 1 0], [0 0 1], [1, 1, 1]]，
+那么就会得到向量[f_{i-2}, f_{i-1}, f_{i}]，所以乘一次矩阵A就可以得到下一个f值，
+那么从初始的向量[1 2 3]开始，乘上A^{n-3}就可以得到[f_{n-2}, f_{n-1}, f_{n}]
+'''
+
+class Solution:
+    def waysToStep(self, n: int) -> int:
+        if n == 1 :
+            return 1
+        if n == 2:
+            return 2
+        tmp1, tmp2, tmp3 = 1,2, 4
+        for i in range( 3, n  ):
+            tmp1, tmp2 , tmp3 = tmp2, tmp3, tmp1 + tmp2 + tmp3
+            tmp1 = tmp1 % 1000000007
+            tmp2 = tmp2 % 1000000007
+            tmp3 = tmp3 % 1000000007
+        return tmp3 
+
+
+# import numpy as np
+
+# class Solution:
+#     def mat_pow(self, A, n):
+#         m = A.shape[0]
+#         B = np.eye(m, dtype=np.int64)
+#         while n > 0:
+#             if (n&1)!=0:
+#                 B = np.mod(np.matmul(B, A), self.p).astype(np.int64)
+#             A = np.mod(np.matmul(A, A), self.p).astype(np.int64)
+#             n >>= 1
+#         return B;
+
+#     def waysToStep(self, n: int) -> int:
+#         self.p = int(1e9+7)
+#         f = [1, 2, 4]
+#         if n <= 3: return f[n-1]
+#         A = np.array([[0, 0, 1], [1, 0, 1], [0, 1, 1]], dtype=np.int64)
+#         B = self.mat_pow(A, n-3)
+#         res = 0
+#         for i in range(3):
+#             res += f[i] * B[i][2]
+#         return int(res%self.p)

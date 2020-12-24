@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给你一个排序后的字符列表 letters ，列表中只包含小写英文字母。另给出一个目标字母 target，请你寻找在这一有序列表里比目标字母大的最小字母。
+在比较时，字母是依序循环出现的。举个例子：
+如果目标字母 target = 'z' 并且字符列表为 letters = ['a', 'b']，则答案返回 'a'
+
+例如：
+输入:
+letters = ["c", "f", "j"]
+target = "a"
+输出: "c"
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/find-smallest-letter-greater-than-target
+'''
+
+'''
+思路：
+1. 通过二分查找,左右边界初始为0和length-1,当中间值mid>target时,右边界=mid - 1,否则左边界=mid + 1
+2. 如果left>right,跳出循环,此时left为大于target的最小字母的下标,right为小于等于target的最大字母的下标,所以return letters[left]
+3. 特殊情况:即如果目标字母 target = 'z' 并且字符列表为 letters = ['a', 'b']，则答案返回 'a'的时候,此时left>right 并且 left == length,right = length -1,
+又因为letters是排序后的列表,所以return letters[0]
+'''
+
+class Solution:
+    def nextGreatestLetter(self, letters: List[str], target: str) -> str:
+        length = len(letters)
+        left = 0
+        right = length-1
+        while(left<=right):
+            mid = (left+right)//2
+            if letters[mid]>target:
+                right = mid-1
+            else:
+                left = mid+1
+        if left == length:
+            return letters[0]
+        else:
+            return letters[left]

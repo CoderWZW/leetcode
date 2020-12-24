@@ -1,0 +1,40 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个非重叠轴对齐矩形的列表 rects，写一个函数 pick 随机均匀地选取矩形覆盖的空间中的整数点。
+
+例如：
+输入: 
+["Solution","pick","pick","pick"]
+[[[[1,1,5,5]]],[],[],[]]
+输出: 
+[null,[4,1],[4,1],[3,3]]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/random-point-in-non-overlapping-rectangles
+'''
+
+'''
+思路：
+
+'''
+
+import bisect
+import random
+class Solution:
+
+    def __init__(self, rects: List[List[int]]):
+        self.rects = rects
+        self.lookup = []
+        self.cur = 0
+        for i in range(len(rects)):
+            x1, y1, x2, y2 = rects[i]
+            self.cur += (x2 - x1 + 1) * (y2 - y1 + 1)
+            self.lookup.append([self.cur, i])
+        
+
+    def pick(self) -> List[int]:
+        loc = bisect.bisect_left(self.lookup, [random.randint(1, self.cur)])
+        x1, y1, x2, y2 = self.rects[self.lookup[loc][1]]  
+        i, j = random.randint(0, x2 - x1), random.randint(0, y2 - y1)
+        return x1 + i, y1 + j
