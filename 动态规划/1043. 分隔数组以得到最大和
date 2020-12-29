@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给你一个整数数组 arr，请你将该数组分隔为长度最多为 k 的一些（连续）子数组。
+分隔完成后，每个子数组的中的所有值都会变为该子数组中的最大值。
+返回将数组分隔变换后能够得到的元素最大和。
+
+例如：
+输入：arr = [1,15,7,9,2,5,10], k = 3
+输出：84
+解释：
+因为 k=3 可以分隔成 [1,15,7] [9] [2,5,10]，结果为 [15,15,15,9,10,10,10]，和为 84，是该数组所有分隔变换后元素总和最大的。
+若是分隔成 [1] [15,7,9] [2,5,10]，结果就是 [1, 15, 15, 15, 10, 10, 10] 但这种分隔方式的元素总和（76）小于上一种。 
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/partition-array-for-maximum-sum
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+'''
+
+'''
+思路：动态规划
+dp[i]代表子数组A[:i]按要求操作能得到的最大和，状态转移方程为：dp[i]=max(dp[j]+max(A[j:i])*(i-j))(i-K <= j < i)，
+其中j表示最后一个分割数组的起始下标，max(A[j:i])表示子数组A[j:i]的最大值，i-K <= j < i保证分割的数组长度不大于K。
+'''
+
+class Solution:
+    def maxSumAfterPartitioning(self, A: List[int], K: int) -> int:
+        n = len(A)
+        dp = [0] * (n+1)
+        for i in range(1,n+1):
+            j = i - 1
+            mx = -float('inf')
+            while i - j <= K and j >= 0:
+                mx = max(mx,A[j])
+                dp[i] = max(dp[i],dp[j]+mx * (i - j))
+                j -= 1
+        return dp[n]
