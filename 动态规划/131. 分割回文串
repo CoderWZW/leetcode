@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+'''
+题目：
+给定一个字符串 s，将 s 分割成一些子串，使每个子串都是回文串。
+返回 s 所有可能的分割方案。
+
+例如：
+输入: "aab"
+输出:
+[
+  ["aa","b"],
+  ["a","a","b"]
+]
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/palindrome-partitioning/
+'''
+
+'''
+思路：动态规划
+临界分析：if s == "":
+            return []
+初始化：ans = [[s[0]] ]
+状态转移：
+1 直接在回文串组后添加新的字符
+2 回文串组的最后一项为单字符且与新的字符相同
+3 回文串组拥有两项以上且倒数第二串与新的字符相同
+'''
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        if s == "":
+            return []
+        ans = [[s[0]] ]
+        for i in range(1, len(s)):
+            curr = s[i]
+            newAns = []
+            for item in ans:
+                newAns.append(item + [curr])
+                if item[-1] == curr:
+                    newAns.append(item[0:-1] + [item[-1] + curr])
+                if len(item) >= 2 and item[-2] == curr:
+                    newAns.append(item[0:-2] + [item[-2] + item[-1] + curr])
+            ans = newAns 
+        return ans
